@@ -1,2 +1,4 @@
-# TAA_2026_C-
-Pedro, Samuel, Vitor
+# TAA_2026_CS
+
+Equipe:
+Pedro Freitag, Samuel Candido, Vitor 
