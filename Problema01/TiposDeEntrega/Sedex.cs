@@ -2,18 +2,26 @@ namespace Problema01.TiposDeEntrega
 {
     internal class Sedex : ITipoDeEntrega
     {
+        private const double PesoLimiteMinimoKg = 0.5;
+        private const double PesoLimiteLeveKg = 1.0;
+        private const double ValorPesoMinimo = 12.50;
+        private const double ValorPesoLeve = 20.00;
+        private const double ValorBase = 46.50;
+        private const double ValorPorBlocoAdicional = 1.50;
+        private const double GramasPorBloco = 100.0;
+        private const double ConversaoKgParaGramas = 1000.0;
+
         public double CalcularValorEntrega(double pesoTotalKg)
         {
-            if (pesoTotalKg <= 0) 
-                throw new ArgumentOutOfRangeException(nameof(pesoTotalKg), "O peso deve ser maior que zero.");
-                
-            if (pesoTotalKg <= 0.5) return 12.50;
-            if (pesoTotalKg <= 1.0) return 20.00;
+            ValidadorDePeso.Validar(pesoTotalKg);
 
-            double pesoAdicionalGramas = (pesoTotalKg - 1.0) * 1000;
-            double blocosAdicionais = Math.Ceiling(pesoAdicionalGramas / 100);
-            
-            return 46.50 + (blocosAdicionais * 1.50);
+            if (pesoTotalKg <= PesoLimiteMinimoKg) return ValorPesoMinimo;
+            if (pesoTotalKg <= PesoLimiteLeveKg) return ValorPesoLeve;
+
+            double pesoAdicionalGramas = Math.Round((pesoTotalKg - PesoLimiteLeveKg) * ConversaoKgParaGramas, 2);
+            double blocosAdicionais = Math.Ceiling(pesoAdicionalGramas / GramasPorBloco);
+
+            return ValorBase + (blocosAdicionais * ValorPorBlocoAdicional);
         }
     }
 }
