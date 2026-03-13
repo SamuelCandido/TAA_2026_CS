@@ -1,6 +1,6 @@
 namespace Problema01.TiposDeEntrega
 {
-    public class IEncomendaPAC : IEntrega
+    internal class IEncomendaPAC : ITipoDeEntrega
     {
         public void CalcularValorEntrega()
         {

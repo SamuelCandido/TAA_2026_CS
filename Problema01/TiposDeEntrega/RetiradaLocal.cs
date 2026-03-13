@@ -1,6 +1,6 @@
 namespace Problema01.TiposDeEntrega
 {
-    public class IRetiradaLocal: IEntrega
+    internal class IRetiradaLocal: ITipoDeEntrega
     {
          public void CalcularValorEntrega()
         {

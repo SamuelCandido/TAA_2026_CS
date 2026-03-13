@@ -1,6 +1,6 @@
 namespace Problema01.TiposDeEntrega
 {
-    public interface IEntrega
+    public interface ITipoDeEntrega
     {
         void CalcularValorEntrega();
     }

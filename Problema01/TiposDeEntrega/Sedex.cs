@@ -1,6 +1,6 @@
 namespace Problema01.TiposDeEntrega
 {
-    public class ISedex: IEntrega
+    internal class ISedex: ITipoDeEntrega
     {
          public void CalcularValorEntrega()
         {
