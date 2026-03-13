@@ -1,10 +1,13 @@
 namespace Problema01.TiposDeEntrega
 {
-    internal class IRetiradaLocal: ITipoDeEntrega
+    internal class RetiradaLocal : ITipoDeEntrega
     {
-         public void CalcularValorEntrega()
+        public double CalcularValorEntrega(double pesoTotalKg)
         {
-            throw new NotImplementedException();
+            if (pesoTotalKg <= 0) 
+                throw new ArgumentOutOfRangeException(nameof(pesoTotalKg), "O peso deve ser maior que zero.");
+                
+            return 0.00;
         }
     }
 }
