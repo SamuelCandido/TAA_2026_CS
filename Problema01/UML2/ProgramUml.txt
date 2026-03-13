@@ -5,19 +5,56 @@ namespace Problema01.TiposDeEntrega {
     }
 
     class EncomendaPAC {
+        - PesoMaximoKg: double = 2.0
+        - PesoLimiteLeveKg: double = 1.0
+        - ValorPesoLeve: double = 10.00
+        - ValorPesoPesado: double = 15.00
         + CalcularValorEntrega(pesoTotalKg: double): double
     }
 
     class Sedex {
+        - PesoLimiteMinimoKg: double = 0.5
+        - PesoLimiteLeveKg: double = 1.0
+        - ValorPesoMinimo: double = 12.50
+        - ValorPesoLeve: double = 20.00
+        - ValorBase: double = 46.50
+        - ValorPorBlocoAdicional: double = 1.50
+        - GramasPorBloco: double = 100.0
+        - ConversaoKgParaGramas: double = 1000.0
         + CalcularValorEntrega(pesoTotalKg: double): double
     }
 
     class RetiradaLocal {
+        - ValorRetiradaLocal: double = 0.00
         + CalcularValorEntrega(pesoTotalKg: double): double
+    }
+
+    class ValidadorDePeso <<static>> {
+        + {static} Validar(pesoTotalKg: double): void
     }
 
     ITipoDeEntrega <|.. EncomendaPAC
     ITipoDeEntrega <|.. Sedex
     ITipoDeEntrega <|.. RetiradaLocal
+    
+    EncomendaPAC ..> ValidadorDePeso : uses
+    Sedex ..> ValidadorDePeso : uses
+    RetiradaLocal ..> ValidadorDePeso : uses
+}
+
+namespace Problema01 {
+    enum TipoDeEntrega {
+        ENCOMENDA_PAC
+        RETIRADA_LOCAL
+        SEDEX
+    }
+
+    class TipoDeEntregaFactory <<static>> {
+        - {static} Fabricas: Dictionary<TipoDeEntrega, Func<ITipoDeEntrega>>
+        + {static} CriarTipoDeEntrega(tipoDeEntrega: TipoDeEntrega): ITipoDeEntrega
+    }
+
+    TipoDeEntregaFactory ..> TipoDeEntrega : uses
+    TipoDeEntregaFactory ..> Problema01.TiposDeEntrega.ITipoDeEntrega : creates
 }
 @enduml
