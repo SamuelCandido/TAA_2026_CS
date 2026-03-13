@@ -1,0 +1,23 @@
+@startuml
+namespace Problema01.TiposDeEntrega {
+    interface ITipoDeEntrega {
+        + CalcularValorEntrega(pesoTotalKg: double): double
+    }
+
+    class EncomendaPAC {
+        + CalcularValorEntrega(pesoTotalKg: double): double
+    }
+
+    class Sedex {
+        + CalcularValorEntrega(pesoTotalKg: double): double
+    }
+
+    class RetiradaLocal {
+        + CalcularValorEntrega(pesoTotalKg: double): double
+    }
+
+    ITipoDeEntrega <|.. EncomendaPAC
+    ITipoDeEntrega <|.. Sedex
+    ITipoDeEntrega <|.. RetiradaLocal
+}
+@enduml
