@@ -6,36 +6,36 @@ namespace Problema01.Teste
 {
     public class TesteTiposDeEntrega
     {
+        // Testes Peso
+        [Fact]
+        public void Peso_ZeroOuNegativo_DeveLancarExcecao()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Peso(0m, UnidadeDePeso.QUILOGRAMA));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Peso(-1m, UnidadeDePeso.QUILOGRAMA));
+        }
+
         // Testes EncomendaPAC
         [Fact]
         public void EncomendaPAC_PesoAte1Kg_DeveRetornar10Reais()
         {
             var pac = new EncomendaPAC();
-            Assert.Equal(10.00, pac.CalcularValorEntrega(0.5));
-            Assert.Equal(10.00, pac.CalcularValorEntrega(1.0));
+            Assert.Equal(10.00m, pac.CalcularValorEntrega(new Peso(0.5m, UnidadeDePeso.QUILOGRAMA)));
+            Assert.Equal(10.00m, pac.CalcularValorEntrega(new Peso(1.0m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         [Fact]
         public void EncomendaPAC_PesoEntre1e2Kg_DeveRetornar15Reais()
         {
             var pac = new EncomendaPAC();
-            Assert.Equal(15.00, pac.CalcularValorEntrega(1.5));
-            Assert.Equal(15.00, pac.CalcularValorEntrega(2.0));
+            Assert.Equal(15.00m, pac.CalcularValorEntrega(new Peso(1.5m, UnidadeDePeso.QUILOGRAMA)));
+            Assert.Equal(15.00m, pac.CalcularValorEntrega(new Peso(2.0m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         [Fact]
         public void EncomendaPAC_PesoAcimaDe2Kg_DeveLancarExcecao()
         {
             var pac = new EncomendaPAC();
-            Assert.Throws<ArgumentOutOfRangeException>(() => pac.CalcularValorEntrega(2.1));
-        }
-
-        [Fact]
-        public void EncomendaPAC_PesoZeroOuNegativo_DeveLancarExcecao()
-        {
-            var pac = new EncomendaPAC();
-            Assert.Throws<ArgumentOutOfRangeException>(() => pac.CalcularValorEntrega(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => pac.CalcularValorEntrega(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => pac.CalcularValorEntrega(new Peso(2.1m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         // Testes Sedex
@@ -43,36 +43,25 @@ namespace Problema01.Teste
         public void Sedex_PesoAte500g_DeveRetornar12e50()
         {
             var sedex = new Sedex();
-            Assert.Equal(12.50, sedex.CalcularValorEntrega(0.3));
-            Assert.Equal(12.50, sedex.CalcularValorEntrega(0.5));
+            Assert.Equal(12.50m, sedex.CalcularValorEntrega(new Peso(0.3m, UnidadeDePeso.QUILOGRAMA)));
+            Assert.Equal(12.50m, sedex.CalcularValorEntrega(new Peso(0.5m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         [Fact]
         public void Sedex_PesoEntre500gE1Kg_DeveRetornar20Reais()
         {
             var sedex = new Sedex();
-            Assert.Equal(20.00, sedex.CalcularValorEntrega(0.7));
-            Assert.Equal(20.00, sedex.CalcularValorEntrega(1.0));
+            Assert.Equal(20.00m, sedex.CalcularValorEntrega(new Peso(0.7m, UnidadeDePeso.QUILOGRAMA)));
+            Assert.Equal(20.00m, sedex.CalcularValorEntrega(new Peso(1.0m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         [Fact]
         public void Sedex_PesoAcimaDe1Kg_DeveCalcularComBlocosAdicionais()
         {
             var sedex = new Sedex();
-            // 1.1kg = 100g adicional = 1 bloco = 46.50 + 1.50 = 48.00
-            Assert.Equal(48.00, sedex.CalcularValorEntrega(1.1));
-            // 1.2kg = 200g adicional = 2 blocos = 46.50 + 3.00 = 49.50
-            Assert.Equal(49.50, sedex.CalcularValorEntrega(1.2));
-            // 1.25kg = 250g adicional = 3 blocos = 46.50 + 4.50 = 51.00
-            Assert.Equal(51.00, sedex.CalcularValorEntrega(1.25));
-        }
-
-        [Fact]
-        public void Sedex_PesoZeroOuNegativo_DeveLancarExcecao()
-        {
-            var sedex = new Sedex();
-            Assert.Throws<ArgumentOutOfRangeException>(() => sedex.CalcularValorEntrega(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => sedex.CalcularValorEntrega(-0.5));
+            Assert.Equal(48.00m, sedex.CalcularValorEntrega(new Peso(1.1m, UnidadeDePeso.QUILOGRAMA)));            
+            Assert.Equal(49.50m, sedex.CalcularValorEntrega(new Peso(1.2m, UnidadeDePeso.QUILOGRAMA)));            
+            Assert.Equal(51.00m, sedex.CalcularValorEntrega(new Peso(1.25m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         // Testes RetiradaLocal
@@ -80,17 +69,9 @@ namespace Problema01.Teste
         public void RetiradaLocal_QualquerPesoValido_DeveRetornarZero()
         {
             var retirada = new RetiradaLocal();
-            Assert.Equal(0.00, retirada.CalcularValorEntrega(0.5));
-            Assert.Equal(0.00, retirada.CalcularValorEntrega(5.0));
-            Assert.Equal(0.00, retirada.CalcularValorEntrega(100.0));
-        }
-
-        [Fact]
-        public void RetiradaLocal_PesoZeroOuNegativo_DeveLancarExcecao()
-        {
-            var retirada = new RetiradaLocal();
-            Assert.Throws<ArgumentOutOfRangeException>(() => retirada.CalcularValorEntrega(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => retirada.CalcularValorEntrega(-1));
+            Assert.Equal(0.00m, retirada.CalcularValorEntrega(new Peso(0.5m, UnidadeDePeso.QUILOGRAMA)));
+            Assert.Equal(0.00m, retirada.CalcularValorEntrega(new Peso(5.0m, UnidadeDePeso.QUILOGRAMA)));
+            Assert.Equal(0.00m, retirada.CalcularValorEntrega(new Peso(100.0m, UnidadeDePeso.QUILOGRAMA)));
         }
 
         // Testes Factory
