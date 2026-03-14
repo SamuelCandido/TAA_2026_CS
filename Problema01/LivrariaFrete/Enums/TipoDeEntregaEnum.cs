@@ -1,6 +1,6 @@
-namespace Problema01
+namespace Problema01.LivrariaFrete.Enums
 {
-    public enum TipoDeEntrega
+    public enum TipoDeEntregaEnum
     {
         ENCOMENDA_PAC,
         RETIRADA_LOCAL,
