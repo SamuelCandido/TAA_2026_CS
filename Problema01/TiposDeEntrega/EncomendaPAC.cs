@@ -2,19 +2,17 @@ namespace Problema01.TiposDeEntrega
 {
     internal class EncomendaPAC : ITipoDeEntrega
     {
-        private const double PesoMaximoKg = 2.0;
-        private const double PesoLimiteLeveKg = 1.0;
-        private const double ValorPesoLeve = 10.00;
-        private const double ValorPesoPesado = 15.00;
+        private const decimal PesoMaximoKg = 2.0m;
+        private const decimal PesoLimiteLeveKg = 1.0m;
+        private const decimal ValorPesoLeve = 10.00m;
+        private const decimal ValorPesoPesado = 15.00m;
 
-        public double CalcularValorEntrega(double pesoTotalKg)
+        public decimal CalcularValorEntrega(Peso peso)
         {
-            ValidadorDePeso.Validar(pesoTotalKg);
+            if (peso.EmQuilogramas > PesoMaximoKg)
+                throw new ArgumentOutOfRangeException(nameof(peso));
 
-            if (pesoTotalKg > PesoMaximoKg)
-                throw new ArgumentOutOfRangeException(nameof(pesoTotalKg), "PAC aceita apenas pedidos até 2kg.");
-
-            if (pesoTotalKg <= PesoLimiteLeveKg) return ValorPesoLeve;
+            if (peso.EmQuilogramas <= PesoLimiteLeveKg) return ValorPesoLeve;
 
             return ValorPesoPesado;
         }

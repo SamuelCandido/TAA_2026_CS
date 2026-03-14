@@ -2,12 +2,10 @@ namespace Problema01.TiposDeEntrega
 {
     internal class RetiradaLocal : ITipoDeEntrega
     {
-        private const double ValorRetiradaLocal = 0.00;
+        private const decimal ValorRetiradaLocal = 0.00m;
 
-        public double CalcularValorEntrega(double pesoTotalKg)
+        public decimal CalcularValorEntrega(Peso peso)
         {
-            ValidadorDePeso.Validar(pesoTotalKg);
-
             return ValorRetiradaLocal;
         }
     }

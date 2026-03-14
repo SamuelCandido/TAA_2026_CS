@@ -1,12 +1,13 @@
 using Problema01.TiposDeEntrega;
+using System;
 
 namespace Problema01
 {
     public class TipoDeEntregaFactory
     {
-        public static ITipoDeEntrega CriarTipoDeEntrega(TipoDeEntrega tipoDeEntrega)
+        public static ITipoDeEntrega CriarTipoDeEntrega(TipoDeEntrega tipoEntidade)
         {
-            switch (tipoDeEntrega)
+            switch (tipoEntidade)
             {
                 case TipoDeEntrega.ENCOMENDA_PAC:
                     return new EncomendaPAC();
@@ -15,7 +16,7 @@ namespace Problema01
                 case TipoDeEntrega.SEDEX:
                     return new Sedex();
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentOutOfRangeException(nameof(tipoEntidade), "Tipo de entrega não suportado.");
             }
         }
     }
