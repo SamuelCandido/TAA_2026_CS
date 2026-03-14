@@ -1,60 +1,68 @@
 @startuml
-namespace Problema01.TiposDeEntrega {
-    interface ITipoDeEntrega {
-        + CalcularValorEntrega(pesoTotalKg: double): double
+skinparam classAttributeIconSize 0
+
+package Problema01 {
+    enum UnidadeDePeso {
+        GRAMA = 1
+        QUILOGRAMA = 1000
+        TONELADA = 1000000
     }
 
-    class EncomendaPAC {
-        - PesoMaximoKg: double = 2.0
-        - PesoLimiteLeveKg: double = 1.0
-        - ValorPesoLeve: double = 10.00
-        - ValorPesoPesado: double = 15.00
-        + CalcularValorEntrega(pesoTotalKg: double): double
-    }
-
-    class Sedex {
-        - PesoLimiteMinimoKg: double = 0.5
-        - PesoLimiteLeveKg: double = 1.0
-        - ValorPesoMinimo: double = 12.50
-        - ValorPesoLeve: double = 20.00
-        - ValorBase: double = 46.50
-        - ValorPorBlocoAdicional: double = 1.50
-        - GramasPorBloco: double = 100.0
-        - ConversaoKgParaGramas: double = 1000.0
-        + CalcularValorEntrega(pesoTotalKg: double): double
-    }
-
-    class RetiradaLocal {
-        - ValorRetiradaLocal: double = 0.00
-        + CalcularValorEntrega(pesoTotalKg: double): double
-    }
-
-    class ValidadorDePeso <<static>> {
-        + {static} Validar(pesoTotalKg: double): void
-    }
-
-    ITipoDeEntrega <|.. EncomendaPAC
-    ITipoDeEntrega <|.. Sedex
-    ITipoDeEntrega <|.. RetiradaLocal
-    
-    EncomendaPAC ..> ValidadorDePeso : uses
-    Sedex ..> ValidadorDePeso : uses
-    RetiradaLocal ..> ValidadorDePeso : uses
-}
-
-namespace Problema01 {
     enum TipoDeEntrega {
         ENCOMENDA_PAC
         RETIRADA_LOCAL
         SEDEX
     }
 
-    class TipoDeEntregaFactory <<static>> {
-        - {static} Fabricas: Dictionary<TipoDeEntrega, Func<ITipoDeEntrega>>
-        + {static} CriarTipoDeEntrega(tipoDeEntrega: TipoDeEntrega): ITipoDeEntrega
+    class TipoDeEntregaFactory {
+        + {static} CriarTipoDeEntrega(tipoEntidade: TipoDeEntrega): ITipoDeEntrega
+    }
+}
+
+package Problema01.TiposDeEntrega {
+    struct Peso <<Value Object>> {
+        + EmGramas: decimal
+        + EmQuilogramas: decimal
+        + EmToneladas: decimal
+        + Peso(valor: decimal, unidade: UnidadeDePeso)
     }
 
-    TipoDeEntregaFactory ..> TipoDeEntrega : uses
-    TipoDeEntregaFactory ..> Problema01.TiposDeEntrega.ITipoDeEntrega : creates
+    interface ITipoDeEntrega {
+        + CalcularValorEntrega(peso: Peso): decimal
+    }
+
+    class RetiradaLocal {
+        - {static} ValorRetiradaLocal: decimal
+        + CalcularValorEntrega(peso: Peso): decimal
+    }
+
+    class EncomendaPAC {
+        - {static} PesoMaximoKg: decimal
+        - {static} PesoLimiteLeveKg: decimal
+        - {static} ValorPesoLeve: decimal
+        - {static} ValorPesoPesado: decimal
+        + CalcularValorEntrega(peso: Peso): decimal
+    }
+
+    class Sedex {
+        - {static} PesoLimiteMinimoKg: decimal
+        - {static} PesoLimiteLeveKg: decimal
+        - {static} ValorPesoMinimo: decimal
+        - {static} ValorPesoLeve: decimal
+        - {static} ValorBase: decimal
+        - {static} ValorPorBlocoAdicional: decimal
+        - {static} GramasPorBloco: decimal
+        + CalcularValorEntrega(peso: Peso): decimal
+    }
 }
+
+RetiradaLocal ..|> ITipoDeEntrega
+EncomendaPAC ..|> ITipoDeEntrega
+Sedex ..|> ITipoDeEntrega
+
+TipoDeEntregaFactory ..> ITipoDeEntrega : <<cria>>
+TipoDeEntregaFactory ..> TipoDeEntrega : <<usa>>
+
+ITipoDeEntrega ..> Peso : <<usa>>
+Peso ..> UnidadeDePeso : <<usa>>
 @enduml
