@@ -1,4 +1,3 @@
-using System;
 using Problema01.LivrariaFrete.Enums;
 
 namespace Problema01.LivrariaFrete.Models

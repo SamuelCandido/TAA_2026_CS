@@ -1,58 +1,92 @@
 @startuml
 skinparam classAttributeIconSize 0
+skinparam style strictuml
 
-package Problema01 {
-    enum UnidadeDePeso {
+package "Problema01.LivrariaFrete.Enums" {
+    enum UnidadeDePesoEnum <<enumeration>> {
         GRAMA = 1
         QUILOGRAMA = 1000
         TONELADA = 1000000
     }
 
-    enum TipoDeEntrega {
+    enum TipoDeEntregaEnum <<enumeration>> {
         ENCOMENDA_PAC
         RETIRADA_LOCAL
         SEDEX
     }
+}
 
-    class TipoDeEntregaFactory {
-        + {static} CriarTipoDeEntrega(tipoEntidade: TipoDeEntrega): ITipoDeEntrega
+package "Problema01.LivrariaFrete.Models" {
+    class Peso <<Value Object>> {
+        + EmGramas : decimal {readOnly}
+        + /EmQuilogramas : decimal {readOnly}
+        + /EmToneladas : decimal {readOnly}
+        --
+        + Peso(valor : decimal, unidade : UnidadeDePesoEnum)
+    }
+
+    class Produto {
+        + Nome : string {readOnly}
+        + Valor : decimal {readOnly}
+        + Peso : Peso {readOnly}
+        --
+        + Produto(nome : string, valor : decimal, peso : Peso)
+    }
+
+    class Pedido {
+        - _produtos : List<Produto>
+        --
+        + AdicionarProduto(produto : Produto) : void
+        + PossuiProdutos() : bool
+        + PesoTotal() : Peso
     }
 }
 
-package Problema01.TiposDeEntrega {
-    struct Peso <<Value Object>> {
-        + EmGramas: decimal
-        + EmQuilogramas: decimal
-        + EmToneladas: decimal
-        + Peso(valor: decimal, unidade: UnidadeDePeso)
-    }
-
-    interface ITipoDeEntrega {
-        + CalcularValorEntrega(peso: Peso): decimal
+package "Problema01.LivrariaFrete.TiposDeEntrega" {
+    interface ITipoDeEntrega <<interface>> {
+        + CalcularValorEntrega(peso : Peso) : decimal
     }
 
     class RetiradaLocal {
-        - {static} ValorRetiradaLocal: decimal
-        + CalcularValorEntrega(peso: Peso): decimal
+        - {static} VALOR_RETIRADA_LOCAL : decimal = 0.00
+        --
+        + CalcularValorEntrega(peso : Peso) : decimal
     }
 
     class EncomendaPAC {
-        - {static} PesoMaximoKg: decimal
-        - {static} PesoLimiteLeveKg: decimal
-        - {static} ValorPesoLeve: decimal
-        - {static} ValorPesoPesado: decimal
-        + CalcularValorEntrega(peso: Peso): decimal
+        - {static} PESO_MAXIMO_KG : decimal = 2.0
+        - {static} PESO_MAXIMO_LEVE_KG : decimal = 1.0
+        - {static} VALOR_PESO_LEVE : decimal = 10.00
+        - {static} VALOR_PESO_PESADO : decimal = 15.00
+        --
+        + CalcularValorEntrega(peso : Peso) : decimal
     }
 
     class Sedex {
-        - {static} PesoLimiteMinimoKg: decimal
-        - {static} PesoLimiteLeveKg: decimal
-        - {static} ValorPesoMinimo: decimal
-        - {static} ValorPesoLeve: decimal
-        - {static} ValorBase: decimal
-        - {static} ValorPorBlocoAdicional: decimal
-        - {static} GramasPorBloco: decimal
-        + CalcularValorEntrega(peso: Peso): decimal
+        - {static} PESO_MINIMO_KG : decimal = 0.5
+        - {static} PESO_MAXIMO_LEVE_KG : decimal = 1.0
+        - {static} VALOR_PESO_MINIMO : decimal = 12.50
+        - {static} VALOR_PESO_LEVE : decimal = 20.00
+        - {static} VALOR_BASE_PESO_PESADO : decimal = 46.50
+        - {static} VALOR_BLOCO_ADICIONAL : decimal = 1.50
+        - {static} PESO_BLOCO_GRAMAS : decimal = 100.0
+        --
+        + CalcularValorEntrega(peso : Peso) : decimal
+    }
+}
+
+package "Problema01.LivrariaFrete.Factories" {
+    class TipoDeEntregaFactory {
+        + {static} CriarTipoDeEntrega(tipo : TipoDeEntregaEnum) : ITipoDeEntrega
+    }
+}
+
+package "Problema01.LivrariaFrete.Services" {
+    class CalculadoraFreteService {
+        - _tipoDeEntrega : ITipoDeEntrega
+        --
+        + CalculadoraFreteService(tipoDeEntrega : ITipoDeEntrega)
+        + Calcular(pedido : Pedido) : decimal
     }
 }
 
@@ -60,9 +94,15 @@ RetiradaLocal ..|> ITipoDeEntrega
 EncomendaPAC ..|> ITipoDeEntrega
 Sedex ..|> ITipoDeEntrega
 
-TipoDeEntregaFactory ..> ITipoDeEntrega : <<cria>>
-TipoDeEntregaFactory ..> TipoDeEntrega : <<usa>>
+TipoDeEntregaFactory ..> ITipoDeEntrega : <<create>>
+TipoDeEntregaFactory ..> TipoDeEntregaEnum : <<use>>
+ITipoDeEntrega ..> Peso : <<use>>
+Peso ..> UnidadeDePesoEnum : <<use>>
+Pedido ..> Peso : <<create>>
+CalculadoraFreteService ..> Pedido : <<use>>
 
-ITipoDeEntrega ..> Peso : <<usa>>
-Peso ..> UnidadeDePeso : <<usa>>
+Produto "1" --> "1" Peso
+Pedido "1" o-- "0..*" Produto : _produtos
+CalculadoraFreteService "1" --> "1" ITipoDeEntrega : _tipoDeEntrega
+
 @enduml

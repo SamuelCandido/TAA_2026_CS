@@ -11,15 +11,16 @@ namespace Problema01.LivrariaFrete.Models
             _produtos.Add(produto);
         }
 
+        public bool PossuiProdutos() => _produtos.Count > 0;
+
         public Peso PesoTotal()
         {
-            decimal totalGramas = 0;
+            if (!PossuiProdutos())
+                throw new InvalidOperationException("O pedido não possui produtos.");
 
-            foreach (var produto in _produtos)
-                totalGramas += produto.Peso.EmGramas;
+            decimal totalGramas = _produtos.Sum(p => p.Peso.EmGramas);
 
             return new Peso(totalGramas, UnidadeDePesoEnum.GRAMA);
         }
-
     }
 }

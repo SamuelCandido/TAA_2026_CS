@@ -1,5 +1,3 @@
-using System;
-
 namespace Problema01.LivrariaFrete.Enums
 {
     public enum UnidadeDePesoEnum

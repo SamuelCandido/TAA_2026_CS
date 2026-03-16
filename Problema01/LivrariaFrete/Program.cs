@@ -64,8 +64,15 @@ var tipoDeEntregaObj = TipoDeEntregaFactory.CriarTipoDeEntrega(tipoEntrega);
 
 var calculadora = new CalculadoraFreteService(tipoDeEntregaObj);
 
-decimal valorFrete = calculadora.Calcular(pedido);
+try
+{
+    decimal valorFrete = calculadora.Calcular(pedido);
 
-Console.WriteLine("\n=== Resultado ===");
-Console.WriteLine($"Peso total: {pedido.PesoTotal().EmQuilogramas:N2} kg");
-Console.WriteLine($"Valor do frete: R$ {valorFrete:N2}");
+    Console.WriteLine("\n=== Resultado ===");
+    Console.WriteLine($"Peso total: {pedido.PesoTotal().EmQuilogramas:N2} kg");
+    Console.WriteLine($"Valor do frete: R$ {valorFrete:N2}");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"\nErro: {ex.Message}");
+}
