@@ -1,9 +1,11 @@
 using BolsaValores.Enums;
+using BolsaValores.Factories;
 using BolsaValores.Interfaces;
 
 namespace BolsaValores.Models
 {
-    public class Investidor : IInvestidorObserver
+
+    public class Investidor : IObservadorDeAcao
     {
         public string Nome { get; }
         private readonly List<OrdemProgramada> _ordensProgramadas = new();
@@ -16,36 +18,33 @@ namespace BolsaValores.Models
             Nome = nome;
         }
 
-        public void RegistrarOrdem(Acao acao, TipoOrdemEnum tipo, decimal valor)
+        public void RegistrarOrdem(Acao acao, TipoOrdem tipo, Dinheiro valor)
         {
-            var ordem = new Ordem(this, tipo, valor);
+            var ordem = OrdemFactory.CriarOrdem(this, tipo, valor);
             acao.RegistrarOrdem(ordem);
         }
 
         public void AcompanharAcao(Acao acao)
         {
-            acao.RegistrarObserver(this);
+            acao.RegistrarObservador(this);
         }
 
-        public void ProgramarOrdem(Acao acao, decimal valorGatilho, TipoOrdemEnum tipoOrdem, decimal valorOrdem)
+        public void ProgramarOrdem(Acao acao, Dinheiro valorGatilho, TipoOrdem tipoOrdem, Dinheiro valorOrdem)
         {
-            var programacao = new OrdemProgramada(acao, valorGatilho, tipoOrdem, valorOrdem);
+            var programacao = OrdemFactory.CriarOrdemProgramada(acao, valorGatilho, tipoOrdem, valorOrdem);
             _ordensProgramadas.Add(programacao);
-            
             AcompanharAcao(acao);
         }
 
-        public void Atualizar(Acao acao)
+        public void NotificarAlteracaoDeValor(Acao acao)
         {
-            var ordensDisparadas = _ordensProgramadas
-                .Where(op => op.Acao == acao && op.CondicaoAtendida())
+            var ordensParaDisparar = _ordensProgramadas
+                .Where(ordem => ordem.DeveDisparar(acao))
                 .ToList();
 
-            foreach (var ordemProgramada in ordensDisparadas)
+            foreach (var ordemProgramada in ordensParaDisparar)
             {
-        
-                _ordensProgramadas.Remove(ordemProgramada); 
-                        
+                _ordensProgramadas.Remove(ordemProgramada);
                 RegistrarOrdem(acao, ordemProgramada.TipoOrdem, ordemProgramada.ValorOrdem);
             }
         }

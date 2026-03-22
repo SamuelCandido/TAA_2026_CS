@@ -1,0 +1,107 @@
+@startuml BolsaDeValores
+
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+enum TipoOrdem <<enumeration>> {
+  Compra
+  Venda
+}
+
+interface IObservadorDeAcao <<interface>> {
+  + NotificarAlteracaoDeValor(acao: Acao): void
+}
+
+class Dinheiro <<valueObject>> {
+  - quantia: decimal
+  --
+  + Dinheiro(quantia: decimal)
+  + MesmoValor(outro: Dinheiro): bool
+  + Equals(outro: Dinheiro): bool
+  + GetHashCode(): int
+  + ToString(): string
+}
+
+class OrdemFactory <<factory>> {
+  + {static} CriarOrdem(investidor: Investidor, tipo: TipoOrdem, valor: Dinheiro): Ordem
+  + {static} CriarOrdemProgramada(acao: Acao, valorGatilho: Dinheiro, tipoOrdem: TipoOrdem, valorOrdem: Dinheiro): OrdemProgramada
+}
+
+class Acao <<Subject>> {
+  + Nome: string <<readonly>>
+  + ValorAtual: Dinheiro <<get, private set>>
+  + Ordens: IReadOnlyCollection<Ordem> <<readonly>>
+  - _ordens: List<Ordem>
+  - _observadores: List<IObservadorDeAcao>
+  --
+  + Acao(nome: string, valorInicial: Dinheiro)
+  + RegistrarObservador(observador: IObservadorDeAcao): void
+  + RegistrarOrdem(novaOrdem: Ordem): void
+  - BuscarOrdemCompativel(novaOrdem: Ordem): Ordem
+  - ExecutarTransacao(ordemExistente: Ordem, novaOrdem: Ordem): void
+  - AtualizarValor(novoValor: Dinheiro): void
+  - NotificarObservadores(): void
+}
+
+class Investidor <<ConcreteObserver>> {
+  + Nome: string <<readonly>>
+  - _ordensProgramadas: List<OrdemProgramada>
+  --
+  + Investidor(nome: string)
+  + RegistrarOrdem(acao: Acao, tipo: TipoOrdem, valor: Dinheiro): void
+  + AcompanharAcao(acao: Acao): void
+  + ProgramarOrdem(acao: Acao, valorGatilho: Dinheiro, tipoOrdem: TipoOrdem, valorOrdem: Dinheiro): void
+  + NotificarAlteracaoDeValor(acao: Acao): void
+}
+
+class Ordem {
+  + Investidor: Investidor <<readonly>>
+  + Tipo: TipoOrdem <<readonly>>
+  + Valor: Dinheiro <<readonly>>
+  --
+  + Ordem(investidor: Investidor, tipo: TipoOrdem, valor: Dinheiro)
+  + EhCompativelCom(outra: Ordem): bool
+  - TipoOposto(outra: Ordem): bool
+  - MesmoValor(outra: Ordem): bool
+}
+
+class OrdemProgramada {
+  + Acao: Acao <<readonly>>
+  + ValorGatilho: Dinheiro <<readonly>>
+  + TipoOrdem: TipoOrdem <<readonly>>
+  + ValorOrdem: Dinheiro <<readonly>>
+  --
+  + OrdemProgramada(acao: Acao, valorGatilho: Dinheiro, tipoOrdem: TipoOrdem, valorOrdem: Dinheiro)
+  + PertenceAcao(acao: Acao): bool
+  + CondicaoAtendida(): bool
+  + DeveDisparar(acao: Acao): bool
+}
+
+' === Observer Pattern ===
+Investidor ..|> IObservadorDeAcao
+Acao "1" o-- "0..*" IObservadorDeAcao : observadores
+
+' === Composições ===
+Acao "1" *-- "0..*" Ordem : ordens
+Investidor "1" *-- "0..*" OrdemProgramada : ordensProgramadas
+
+' === Associações ===
+Ordem --> "1" Investidor : investidor
+OrdemProgramada --> "1" Acao : acao
+Investidor --> Acao : usa
+
+' === Value Object (atributo tipado) ===
+Acao --> Dinheiro : valorAtual
+Ordem --> Dinheiro : valor
+OrdemProgramada --> Dinheiro : valorGatilho / valorOrdem
+
+' === Enum ===
+Ordem --> TipoOrdem : tipo
+OrdemProgramada --> TipoOrdem : tipoOrdem
+
+' === Factory ===
+OrdemFactory ..> Ordem : <<creates>>
+OrdemFactory ..> OrdemProgramada : <<creates>>
+Investidor ..> OrdemFactory : <<uses>>
+
+@enduml
