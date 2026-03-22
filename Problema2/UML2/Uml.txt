@@ -22,11 +22,6 @@ class Dinheiro <<valueObject>> {
   + ToString(): string
 }
 
-class OrdemFactory <<factory>> {
-  + {static} CriarOrdem(investidor: Investidor, tipo: TipoOrdem, valor: Dinheiro): Ordem
-  + {static} CriarOrdemProgramada(acao: Acao, valorGatilho: Dinheiro, tipoOrdem: TipoOrdem, valorOrdem: Dinheiro): OrdemProgramada
-}
-
 class Acao <<Subject>> {
   + Nome: string <<readonly>>
   + ValorAtual: Dinheiro <<get, private set>>
@@ -99,9 +94,5 @@ OrdemProgramada --> Dinheiro : valorGatilho / valorOrdem
 Ordem --> TipoOrdem : tipo
 OrdemProgramada --> TipoOrdem : tipoOrdem
 
-' === Factory ===
-OrdemFactory ..> Ordem : <<creates>>
-OrdemFactory ..> OrdemProgramada : <<creates>>
-Investidor ..> OrdemFactory : <<uses>>
 
 @enduml

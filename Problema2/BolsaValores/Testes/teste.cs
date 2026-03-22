@@ -1,5 +1,4 @@
 using BolsaValores.Enums;
-using BolsaValores.Factories;
 using BolsaValores.Interfaces;
 using BolsaValores.Models;
 using Xunit;
@@ -33,32 +32,6 @@ namespace BolsaValores.Testes
         public void Equals_DeveCompararPorValor()
         {
             Assert.Equal(new Dinheiro(50.00m), new Dinheiro(50.00m));
-        }
-    }
-
-    public class OrdemFactoryTestes
-    {
-        [Fact]
-        public void CriarOrdem_DeveRetornarOrdemCorreta()
-        {
-            var investidor = new Investidor("Ana");
-            var valor = new Dinheiro(30.00m);
-
-            var ordem = OrdemFactory.CriarOrdem(investidor, TipoOrdem.Compra, valor);
-
-            Assert.Equal(investidor, ordem.Investidor);
-            Assert.Equal(TipoOrdem.Compra, ordem.Tipo);
-            Assert.Equal(valor, ordem.Valor);
-        }
-
-        [Fact]
-        public void CriarOrdemProgramada_DeveRetornarOrdemProgramadaCorreta()
-        {
-            var acao = new Acao("TEST", new Dinheiro(50.00m));
-            var programada = OrdemFactory.CriarOrdemProgramada(acao, new Dinheiro(60.00m), TipoOrdem.Venda, new Dinheiro(60.00m));
-
-            Assert.Equal(acao, programada.Acao);
-            Assert.Equal(TipoOrdem.Venda, programada.TipoOrdem);
         }
     }
 
@@ -124,30 +97,30 @@ namespace BolsaValores.Testes
         [Fact]
         public void Criar_InvestidorNulo_DeveLancarExcecao()
         {
-            Assert.Throws<ArgumentNullException>(() => OrdemFactory.CriarOrdem(null!, TipoOrdem.Compra, new Dinheiro(10.00m)));
+            Assert.Throws<ArgumentNullException>(() => new Ordem(null!, TipoOrdem.Compra, new Dinheiro(10.00m)));
         }
 
         [Fact]
         public void EhCompativelCom_TipoOpostoMesmoValor_DeveRetornarTrue()
         {
-            var compra = OrdemFactory.CriarOrdem(new Investidor("A"), TipoOrdem.Compra, new Dinheiro(24.00m));
-            var venda = OrdemFactory.CriarOrdem(new Investidor("B"), TipoOrdem.Venda, new Dinheiro(24.00m));
+            var compra = new Ordem(new Investidor("A"), TipoOrdem.Compra, new Dinheiro(24.00m));
+            var venda = new Ordem(new Investidor("B"), TipoOrdem.Venda, new Dinheiro(24.00m));
             Assert.True(compra.EhCompativelCom(venda));
         }
 
         [Fact]
         public void EhCompativelCom_MesmoTipo_DeveRetornarFalse()
         {
-            var c1 = OrdemFactory.CriarOrdem(new Investidor("A"), TipoOrdem.Compra, new Dinheiro(24.00m));
-            var c2 = OrdemFactory.CriarOrdem(new Investidor("B"), TipoOrdem.Compra, new Dinheiro(24.00m));
+            var c1 = new Ordem(new Investidor("A"), TipoOrdem.Compra, new Dinheiro(24.00m));
+            var c2 = new Ordem(new Investidor("B"), TipoOrdem.Compra, new Dinheiro(24.00m));
             Assert.False(c1.EhCompativelCom(c2));
         }
 
         [Fact]
         public void EhCompativelCom_ValoresDiferentes_DeveRetornarFalse()
         {
-            var compra = OrdemFactory.CriarOrdem(new Investidor("A"), TipoOrdem.Compra, new Dinheiro(24.00m));
-            var venda = OrdemFactory.CriarOrdem(new Investidor("B"), TipoOrdem.Venda, new Dinheiro(25.00m));
+            var compra = new Ordem(new Investidor("A"), TipoOrdem.Compra, new Dinheiro(24.00m));
+            var venda = new Ordem(new Investidor("B"), TipoOrdem.Venda, new Dinheiro(25.00m));
             Assert.False(compra.EhCompativelCom(venda));
         }
     }
@@ -207,8 +180,8 @@ namespace BolsaValores.Testes
         public void CondicaoAtendida_DeveRetornarCorretamente()
         {
             var acao = new Acao("TEST", new Dinheiro(100.00m));
-            Assert.True(OrdemFactory.CriarOrdemProgramada(acao, new Dinheiro(100.00m), TipoOrdem.Venda, new Dinheiro(100.00m)).CondicaoAtendida());
-            Assert.False(OrdemFactory.CriarOrdemProgramada(acao, new Dinheiro(110.00m), TipoOrdem.Compra, new Dinheiro(110.00m)).CondicaoAtendida());
+            Assert.True(new OrdemProgramada(acao, new Dinheiro(100.00m), TipoOrdem.Venda, new Dinheiro(100.00m)).CondicaoAtendida());
+            Assert.False(new OrdemProgramada(acao, new Dinheiro(110.00m), TipoOrdem.Compra, new Dinheiro(110.00m)).CondicaoAtendida());
         }
 
         [Fact]
@@ -216,7 +189,7 @@ namespace BolsaValores.Testes
         {
             var acao1 = new Acao("BBAS3", new Dinheiro(50.00m));
             var acao2 = new Acao("PETR4", new Dinheiro(50.00m));
-            var programada = OrdemFactory.CriarOrdemProgramada(acao1, new Dinheiro(50.00m), TipoOrdem.Venda, new Dinheiro(50.00m));
+            var programada = new OrdemProgramada(acao1, new Dinheiro(50.00m), TipoOrdem.Venda, new Dinheiro(50.00m));
             Assert.False(programada.DeveDisparar(acao2));
         }
     }

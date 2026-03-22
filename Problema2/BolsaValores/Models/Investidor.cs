@@ -1,5 +1,4 @@
 using BolsaValores.Enums;
-using BolsaValores.Factories;
 using BolsaValores.Interfaces;
 
 namespace BolsaValores.Models
@@ -20,7 +19,7 @@ namespace BolsaValores.Models
 
         public void RegistrarOrdem(Acao acao, TipoOrdem tipo, Dinheiro valor)
         {
-            var ordem = OrdemFactory.CriarOrdem(this, tipo, valor);
+            var ordem = new Ordem(this, tipo, valor);
             acao.RegistrarOrdem(ordem);
         }
 
@@ -31,7 +30,7 @@ namespace BolsaValores.Models
 
         public void ProgramarOrdem(Acao acao, Dinheiro valorGatilho, TipoOrdem tipoOrdem, Dinheiro valorOrdem)
         {
-            var programacao = OrdemFactory.CriarOrdemProgramada(acao, valorGatilho, tipoOrdem, valorOrdem);
+            var programacao = new OrdemProgramada(acao, valorGatilho, tipoOrdem, valorOrdem);
             _ordensProgramadas.Add(programacao);
             AcompanharAcao(acao);
         }
