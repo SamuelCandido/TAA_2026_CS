@@ -1,0 +1,117 @@
+@startuml BolsaDeValores
+
+' === Configurações de Layout ===
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 70
+
+' === Enumeradores e Interfaces ===
+enum TipoOrdem <<enumeration>> {
+  Compra
+  Venda
+}
+
+interface IObservadorDeAcao <<interface>> {
+  + NotificarAlteracaoDeValor(acao: Acao): void
+}
+
+interface "IEquatable<Dinheiro>" as IEquatable_Dinheiro {
+  + Equals(outro: Dinheiro?): bool
+}
+
+' === Objetos de Valor ===
+class Dinheiro <<sealed>> {
+  + Quantia: decimal <<get>>
+  --
+  + Dinheiro(quantia: decimal)
+  + MesmoValor(outro: Dinheiro): bool
+  + Equals(outro: Dinheiro?): bool
+  + Equals(obj: object?): bool
+  + GetHashCode(): int
+  + {static} operator ==(esquerda: Dinheiro?, direita: Dinheiro?): bool
+  + {static} operator !=(esquerda: Dinheiro?, direita: Dinheiro?): bool
+  + ToString(): string
+}
+
+' === Entidades de Domínio ===
+class Acao {
+  + Nome: string <<get>>
+  + ValorAtual: Dinheiro <<get, private set>>
+  + Ordens: IReadOnlyCollection<Ordem> <<get>>
+  - _ordens: List<Ordem> <<readonly>>
+  - _observadores: List<IObservadorDeAcao> <<readonly>>
+  --
+  + Acao(nome: string, valorInicial: Dinheiro)
+  + RegistrarObservador(observador: IObservadorDeAcao): void
+  + RegistrarOrdem(novaOrdem: Ordem): void
+  - BuscarOrdemCompativel(novaOrdem: Ordem): Ordem?
+  - ExecutarTransacao(ordemExistente: Ordem, novaOrdem: Ordem): void
+  - AtualizarValor(novoValor: Dinheiro): void
+  - NotificarObservadores(): void
+}
+
+class Investidor {
+  + Nome: string <<get>>
+  - _ordensProgramadas: List<OrdemProgramada> <<readonly>>
+  --
+  + Investidor(nome: string)
+  + RegistrarOrdem(acao: Acao, tipo: TipoOrdem, valor: Dinheiro): void
+  + AcompanharAcao(acao: Acao): void
+  + ProgramarOrdem(acao: Acao, valorGatilho: Dinheiro, tipoOrdem: TipoOrdem, valorOrdem: Dinheiro): void
+  + NotificarAlteracaoDeValor(acao: Acao): void
+}
+
+class Ordem {
+  + Investidor: Investidor <<get>>
+  + Tipo: TipoOrdem <<get>>
+  + Valor: Dinheiro <<get>>
+  --
+  + Ordem(investidor: Investidor, tipo: TipoOrdem, valor: Dinheiro)
+  + EhCompativelCom(outra: Ordem): bool
+  - TipoOposto(outra: Ordem): bool
+  - MesmoValor(outra: Ordem): bool
+}
+
+class OrdemProgramada {
+  + Acao: Acao <<get>>
+  + ValorGatilho: Dinheiro <<get>>
+  + TipoOrdem: TipoOrdem <<get>>
+  + ValorOrdem: Dinheiro <<get>>
+  --
+  + OrdemProgramada(acao: Acao, valorGatilho: Dinheiro, tipoOrdem: TipoOrdem, valorOrdem: Dinheiro)
+  + PertenceAcao(acao: Acao): bool
+  + CondicaoAtendida(): bool
+  + DeveDisparar(acao: Acao): bool
+}
+
+' === Classe presente em teste.cs ===
+class ObservadorDeTeste {
+  + FoiNotificado: bool <<get, private set>>
+  + UltimoValor: Dinheiro <<get, private set>>
+  --
+  + NotificarAlteracaoDeValor(acao: Acao): void
+}
+
+' === Implementações ===
+Dinheiro .up.|> IEquatable_Dinheiro
+Investidor .up.|> IObservadorDeAcao
+ObservadorDeTeste .up.|> IObservadorDeAcao
+
+' === Associações de Coleção (Campos e Listas internas) ===
+Acao "1" o-right- "0..*" IObservadorDeAcao : _observadores
+Acao "1" *-down- "0..*" Ordem : _ordens
+Investidor "1" *-down- "0..*" OrdemProgramada : _ordensProgramadas
+
+' === Associações de Propriedades Reais ===
+Ordem -right-> "1" Investidor : Investidor
+OrdemProgramada -left-> "1" Acao : Acao
+Acao -down-> Dinheiro : ValorAtual
+Ordem -down-> Dinheiro : Valor
+OrdemProgramada -down-> Dinheiro : ValorGatilho / ValorOrdem
+Ordem -down-> TipoOrdem : Tipo
+OrdemProgramada -down-> TipoOrdem : TipoOrdem
+ObservadorDeTeste -down-> Dinheiro : UltimoValor
+
+@enduml
