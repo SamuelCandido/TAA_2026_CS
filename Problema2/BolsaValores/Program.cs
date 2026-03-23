@@ -1,5 +1,5 @@
 ﻿using BolsaValores.Enums;
-using BolsaValores.Models;
+using BolsaValores.Models; 
 
 var acoes = new Dictionary<string, Acao>();
 var investidores = new Dictionary<string, Investidor>();

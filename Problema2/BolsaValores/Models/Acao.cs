@@ -32,6 +32,9 @@ namespace BolsaValores.Models
 
         public void RegistrarOrdem(Ordem novaOrdem)
         {
+            if (novaOrdem == null )
+                throw new ArgumentNullException(nameof(novaOrdem));
+
             var ordemCompativel = BuscarOrdemCompativel(novaOrdem);
 
             if (ordemCompativel is null)

@@ -43,6 +43,9 @@ namespace BolsaValores.Models
 
             foreach (var ordemProgramada in ordensParaDisparar)
             {
+                Console.WriteLine(
+                    $"- {Nome} disparou ordem programada ({ordemProgramada.TipoOrdem}) em {acao.Nome}"
+                );
                 _ordensProgramadas.Remove(ordemProgramada);
                 RegistrarOrdem(acao, ordemProgramada.TipoOrdem, ordemProgramada.ValorOrdem);
             }
