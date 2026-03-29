@@ -29,7 +29,7 @@ namespace CasaSmart.Adapters
 
         public bool EstaAberta()
         {
-            return _persiana.EstaPalhetaAberta() && _persiana.EstaPalhetaErguida()
+            return _persiana.EstaPalhetaAberta() && _persiana.EstaPalhetaErguida();
         }
 
         public void FecharPalheta()
