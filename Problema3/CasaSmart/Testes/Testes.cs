@@ -125,7 +125,7 @@ namespace CasaSmart.Testes
         [Fact]
         public void CriarLampada_Phellipes_DeveRetornarILampada()
         {
-            var lampada = DispositivosFactory.CriarLampada(TipoLampadaEnum.Phellipes);
+            var lampada = LampadaFactory.CriarLampada(TipoLampadaEnum.Phellipes);
             Assert.NotNull(lampada);
             Assert.IsAssignableFrom<ILampada>(lampada);
         }
@@ -133,7 +133,7 @@ namespace CasaSmart.Testes
         [Fact]
         public void CriarLampada_Shoyumi_DeveRetornarILampada()
         {
-            var lampada = DispositivosFactory.CriarLampada(TipoLampadaEnum.Shoyumi);
+            var lampada = LampadaFactory.CriarLampada(TipoLampadaEnum.Shoyumi);
             Assert.NotNull(lampada);
             Assert.IsAssignableFrom<ILampada>(lampada);
         }
@@ -142,13 +142,13 @@ namespace CasaSmart.Testes
         public void CriarLampada_TipoInvalido_DeveLancarExcecao()
         {
             Assert.Throws<ArgumentException>(() =>
-                DispositivosFactory.CriarLampada((TipoLampadaEnum)999));
+                LampadaFactory.CriarLampada((TipoLampadaEnum)999));
         }
 
         [Fact]
         public void CriarArCondicionado_Ventobaumn_DeveRetornarIArCondicionado()
         {
-            var ar = DispositivosFactory.CriarArCondicionado(TipoArCondicionadoEnum.Ventobaumn);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(TipoArCondicionadoEnum.Ventobaumn);
             Assert.NotNull(ar);
             Assert.IsAssignableFrom<IArCondicionado>(ar);
         }
@@ -156,7 +156,7 @@ namespace CasaSmart.Testes
         [Fact]
         public void CriarArCondicionado_Gellakaza_DeveRetornarIArCondicionado()
         {
-            var ar = DispositivosFactory.CriarArCondicionado(TipoArCondicionadoEnum.Gellakaza);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(TipoArCondicionadoEnum.Gellakaza);
             Assert.NotNull(ar);
             Assert.IsAssignableFrom<IArCondicionado>(ar);
         }
@@ -165,13 +165,13 @@ namespace CasaSmart.Testes
         public void CriarArCondicionado_TipoInvalido_DeveLancarExcecao()
         {
             Assert.Throws<ArgumentException>(() =>
-                DispositivosFactory.CriarArCondicionado((TipoArCondicionadoEnum)999));
+                ArCondicionadoFactory.CriarArCondicionado((TipoArCondicionadoEnum)999));
         }
 
         [Fact]
         public void CriarPersiana_Solarius_DeveRetornarIPersiana()
         {
-            var persiana = DispositivosFactory.CriarPersiana(TipoPersianaEnum.Solarius);
+            var persiana = PersianaFactory.CriarPersiana(TipoPersianaEnum.Solarius);
             Assert.NotNull(persiana);
             Assert.IsAssignableFrom<IPersiana>(persiana);
         }
@@ -179,7 +179,7 @@ namespace CasaSmart.Testes
         [Fact]
         public void CriarPersiana_Natlight_DeveRetornarIPersiana()
         {
-            var persiana = DispositivosFactory.CriarPersiana(TipoPersianaEnum.Natlight);
+            var persiana = PersianaFactory.CriarPersiana(TipoPersianaEnum.Natlight);
             Assert.NotNull(persiana);
             Assert.IsAssignableFrom<IPersiana>(persiana);
         }
@@ -188,27 +188,27 @@ namespace CasaSmart.Testes
         public void CriarPersiana_TipoInvalido_DeveLancarExcecao()
         {
             Assert.Throws<ArgumentException>(() =>
-                DispositivosFactory.CriarPersiana((TipoPersianaEnum)999));
+                PersianaFactory.CriarPersiana((TipoPersianaEnum)999));
         }
 
         [Fact]
         public void CriarLampada_DeveRetornarTambemIDispositivoObserver()
         {
-            var lampada = DispositivosFactory.CriarLampada(TipoLampadaEnum.Phellipes);
+            var lampada = LampadaFactory.CriarLampada(TipoLampadaEnum.Phellipes);
             Assert.IsAssignableFrom<IDispositivoObserver>(lampada);
         }
 
         [Fact]
         public void CriarArCondicionado_DeveRetornarTambemIDispositivoObserver()
         {
-            var ar = DispositivosFactory.CriarArCondicionado(TipoArCondicionadoEnum.Ventobaumn);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(TipoArCondicionadoEnum.Ventobaumn);
             Assert.IsAssignableFrom<IDispositivoObserver>(ar);
         }
 
         [Fact]
         public void CriarPersiana_DeveRetornarTambemIDispositivoObserver()
         {
-            var persiana = DispositivosFactory.CriarPersiana(TipoPersianaEnum.Solarius);
+            var persiana = PersianaFactory.CriarPersiana(TipoPersianaEnum.Solarius);
             Assert.IsAssignableFrom<IDispositivoObserver>(persiana);
         }
     }
@@ -220,7 +220,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoLampadaEnum.Shoyumi)]
         public void Ligar_DeveEstarLigada(TipoLampadaEnum tipo)
         {
-            var lampada = DispositivosFactory.CriarLampada(tipo);
+            var lampada = LampadaFactory.CriarLampada(tipo);
             lampada.Ligar();
             Assert.True(lampada.EstaLigada());
         }
@@ -230,7 +230,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoLampadaEnum.Shoyumi)]
         public void Desligar_DeveEstarDesligada(TipoLampadaEnum tipo)
         {
-            var lampada = DispositivosFactory.CriarLampada(tipo);
+            var lampada = LampadaFactory.CriarLampada(tipo);
             lampada.Ligar();
             lampada.Desligar();
             Assert.False(lampada.EstaLigada());
@@ -241,7 +241,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoLampadaEnum.Shoyumi)]
         public void Atualizar_ModoSono_DeveDesligar(TipoLampadaEnum tipo)
         {
-            var lampada = DispositivosFactory.CriarLampada(tipo);
+            var lampada = LampadaFactory.CriarLampada(tipo);
             lampada.Ligar();
             ((IDispositivoObserver)lampada).Atualizar(ModoCasaEnum.Sono);
             Assert.False(lampada.EstaLigada());
@@ -252,7 +252,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoLampadaEnum.Shoyumi)]
         public void Atualizar_ModoTrabalho_DeveLigar(TipoLampadaEnum tipo)
         {
-            var lampada = DispositivosFactory.CriarLampada(tipo);
+            var lampada = LampadaFactory.CriarLampada(tipo);
             ((IDispositivoObserver)lampada).Atualizar(ModoCasaEnum.Trabalho);
             Assert.True(lampada.EstaLigada());
         }
@@ -265,7 +265,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoArCondicionadoEnum.Gellakaza)]
         public void Ligar_DeveEstarLigado(TipoArCondicionadoEnum tipo)
         {
-            var ar = DispositivosFactory.CriarArCondicionado(tipo);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(tipo);
             ar.Ligar();
             Assert.True(ar.EstaLigado());
         }
@@ -275,7 +275,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoArCondicionadoEnum.Gellakaza)]
         public void Desligar_DeveEstarDesligado(TipoArCondicionadoEnum tipo)
         {
-            var ar = DispositivosFactory.CriarArCondicionado(tipo);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(tipo);
             ar.Ligar();
             ar.Desligar();
             Assert.False(ar.EstaLigado());
@@ -286,7 +286,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoArCondicionadoEnum.Gellakaza)]
         public void DefinirTemperatura_DeveAlterarTemperatura(TipoArCondicionadoEnum tipo)
         {
-            var ar = DispositivosFactory.CriarArCondicionado(tipo);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(tipo);
             ar.Ligar();
             ar.DefinirTemperatura(22);
             Assert.Equal(22, ar.GetTemperatura());
@@ -297,7 +297,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoArCondicionadoEnum.Gellakaza)]
         public void Atualizar_ModoSono_DeveDesligar(TipoArCondicionadoEnum tipo)
         {
-            var ar = DispositivosFactory.CriarArCondicionado(tipo);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(tipo);
             ar.Ligar();
             ((IDispositivoObserver)ar).Atualizar(ModoCasaEnum.Sono);
             Assert.False(ar.EstaLigado());
@@ -308,7 +308,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoArCondicionadoEnum.Gellakaza)]
         public void Atualizar_ModoTrabalho_DeveLigarEDefinirTemperatura25(TipoArCondicionadoEnum tipo)
         {
-            var ar = DispositivosFactory.CriarArCondicionado(tipo);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(tipo);
             ((IDispositivoObserver)ar).Atualizar(ModoCasaEnum.Trabalho);
             Assert.True(ar.EstaLigado());
             Assert.Equal(25, ar.GetTemperatura());
@@ -322,7 +322,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoPersianaEnum.Natlight)]
         public void SubirPersiana_DeveEstarAberta(TipoPersianaEnum tipo)
         {
-            var persiana = DispositivosFactory.CriarPersiana(tipo);
+            var persiana = PersianaFactory.CriarPersiana(tipo);
             persiana.SubirPersiana();
             Assert.True(persiana.EstaAberta());
         }
@@ -332,7 +332,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoPersianaEnum.Natlight)]
         public void DescerPersiana_DeveEstarFechada(TipoPersianaEnum tipo)
         {
-            var persiana = DispositivosFactory.CriarPersiana(tipo);
+            var persiana = PersianaFactory.CriarPersiana(tipo);
             persiana.SubirPersiana();
             persiana.DescerPersiana();
             Assert.False(persiana.EstaAberta());
@@ -343,7 +343,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoPersianaEnum.Natlight)]
         public void Atualizar_ModoSono_DeveDescer(TipoPersianaEnum tipo)
         {
-            var persiana = DispositivosFactory.CriarPersiana(tipo);
+            var persiana = PersianaFactory.CriarPersiana(tipo);
             persiana.SubirPersiana();
             ((IDispositivoObserver)persiana).Atualizar(ModoCasaEnum.Sono);
             Assert.False(persiana.EstaAberta());
@@ -354,7 +354,7 @@ namespace CasaSmart.Testes
         [InlineData(TipoPersianaEnum.Natlight)]
         public void Atualizar_ModoTrabalho_DeveSubir(TipoPersianaEnum tipo)
         {
-            var persiana = DispositivosFactory.CriarPersiana(tipo);
+            var persiana = PersianaFactory.CriarPersiana(tipo);
             ((IDispositivoObserver)persiana).Atualizar(ModoCasaEnum.Trabalho);
             Assert.True(persiana.EstaAberta());
         }
@@ -367,9 +367,9 @@ namespace CasaSmart.Testes
         {
             var casa = new Casa();
 
-            var lampada = DispositivosFactory.CriarLampada(TipoLampadaEnum.Phellipes);
-            var ar = DispositivosFactory.CriarArCondicionado(TipoArCondicionadoEnum.Ventobaumn);
-            var persiana = DispositivosFactory.CriarPersiana(TipoPersianaEnum.Solarius);
+            var lampada = LampadaFactory.CriarLampada(TipoLampadaEnum.Phellipes);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(TipoArCondicionadoEnum.Ventobaumn);
+            var persiana = PersianaFactory.CriarPersiana(TipoPersianaEnum.Solarius);
 
             lampada.Ligar();
             ar.Ligar();
@@ -391,9 +391,9 @@ namespace CasaSmart.Testes
         {
             var casa = new Casa();
 
-            var lampada = DispositivosFactory.CriarLampada(TipoLampadaEnum.Shoyumi);
-            var ar = DispositivosFactory.CriarArCondicionado(TipoArCondicionadoEnum.Gellakaza);
-            var persiana = DispositivosFactory.CriarPersiana(TipoPersianaEnum.Natlight);
+            var lampada = LampadaFactory.CriarLampada(TipoLampadaEnum.Shoyumi);
+            var ar = ArCondicionadoFactory.CriarArCondicionado(TipoArCondicionadoEnum.Gellakaza);
+            var persiana = PersianaFactory.CriarPersiana(TipoPersianaEnum.Natlight);
 
             casa.AdicionarDispositivo((IDispositivoObserver)lampada);
             casa.AdicionarDispositivo((IDispositivoObserver)ar);
