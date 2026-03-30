@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CasaSmart")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b15104cc98f27d9fc5dfd473fe751c5973130eb7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93a6d48177288ad3ca1c62650cbfbc093bf69e83")]
 [assembly: System.Reflection.AssemblyProductAttribute("CasaSmart")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CasaSmart")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
