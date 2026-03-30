@@ -2,7 +2,7 @@
 
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
-
+scale 0.8
 skinparam nodesep 120
 skinparam ranksep 140
 ' =====================================================
@@ -131,20 +131,77 @@ package "DLL (Dispositivos)" {
 ' =====================================================
 package "Adapters" {
 
-    class LampadaShoyuMiAdapter
-    class LampadaPhellipesAdapter
+    class LampadaShoyuMiAdapter {
+        - _lampada: LampadaShoyuMi
+        --
+        + Ligar(): void
+        + Desligar(): void
+        + EstaLigada(): bool
+        + Atualizar(modo: ModoCasaEnum): void
+    }
 
-    class PersianaSolariusAdapter
-    class PersianaNatLightAdapter
+    class LampadaPhellipesAdapter {
+        - _lampada: LampadaPhellipes
+        --
+        + Ligar(): void
+        + Desligar(): void
+        + EstaLigada(): bool
+        + Atualizar(modo: ModoCasaEnum): void
+    }
 
-    class ArCondicionadoVentoBaumnAdapter
-    class ArCondicionadoGellaKazaAdapter
+    class PersianaSolariusAdapter {
+        - _persiana: PersianaSolarius
+        --
+        + SubirPersiana(): void
+        + DescerPersiana(): void
+        + EstaAberta(): bool
+        + Atualizar(modo: ModoCasaEnum): void
+    }
+
+    class PersianaNatLightAdapter {
+        - _persiana: PersianaNatLight
+        --
+        + SubirPersiana(): void
+        + DescerPersiana(): void
+        + EstaAberta(): bool
+        + FecharPalheta(): void
+        + AbrirPalheta(): void
+        + Atualizar(modo: ModoCasaEnum): void
+    }
+
+    class ArCondicionadoVentoBaumnAdapter {
+        - TemperaturaTrabalho: int = 25
+        - _arCondicionado: ArCondicionadoVentoBaumn
+        --
+        + Ligar(): void
+        + Desligar(): void
+        + AumentarTemperatura(): void
+        + DiminuirTemperatura(): void
+        + DefinirTemperatura(temperatura: int): void
+        + EstaLigado(): bool
+        + GetTemperatura(): int
+        + Atualizar(modo: ModoCasaEnum): void
+    }
+
+    class ArCondicionadoGellaKazaAdapter {
+        - TemperaturaTrabalho: int = 25
+        - _arCondicionado: ArCondicionadoGellaKaza
+        --
+        + Ligar(): void
+        + Desligar(): void
+        + AumentarTemperatura(): void
+        + DiminuirTemperatura(): void
+        + DefinirTemperatura(temperatura: int): void
+        + EstaLigado(): bool
+        + GetTemperatura(): int
+        + Atualizar(modo: ModoCasaEnum): void
+    }
 }
 
 ' =====================================================
 ' CORE (OBSERVER)
 ' =====================================================
-package "Core" {
+package "Models" {
 
     class Casa {
         - dispositivos: List<IDispositivoObserver>
