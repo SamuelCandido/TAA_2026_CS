@@ -7,14 +7,15 @@ using CasaSmart.Enums;
 
 namespace CasaSmart.Adapters
 {
-    public class LampadaPhelippesAdapter : ILampada, IDispositivoObserver
+    public class LampadaPhellipesAdapter : ILampada, IDispositivoObserver
     {
         private LampadaPhellipes _lampada;
 
-        public LampadaPhelippesAdapter(LampadaPhellipes lampada)
+        public LampadaPhellipesAdapter(LampadaPhellipes lampada)
         {
             _lampada = lampada;
         }
+        
         public void Ligar()
         {
             _lampada.SetIntensidade(100);
@@ -34,8 +35,7 @@ namespace CasaSmart.Adapters
         {
             if (modo == ModoCasaEnum.Sono)
                 Desligar();
-
-            if (modo == ModoCasaEnum.Trabalho)
+            else if (modo == ModoCasaEnum.Trabalho)
                 Ligar();
         }
     }

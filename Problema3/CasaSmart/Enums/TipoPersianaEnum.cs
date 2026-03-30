@@ -6,7 +6,7 @@ namespace CasaSmart.Enums
 {
     public enum TipoPersianaEnum
     {
-        Solaris,
+        Solarius,
         Natlight
     }
 }

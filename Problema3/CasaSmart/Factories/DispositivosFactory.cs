@@ -15,7 +15,7 @@ namespace CasaSmart.Factories
             switch (tipo)
             {
                 case TipoLampadaEnum.Phellipes:
-                    return new LampadaPhelippesAdapter(new LampadaPhellipes());
+                    return new LampadaPhellipesAdapter(new LampadaPhellipes());
 
                 case TipoLampadaEnum.Shoyumi:
                     return new LampadaShoyuMiAdapter(new LampadaShoyuMi());
@@ -29,8 +29,8 @@ namespace CasaSmart.Factories
         {
             switch (tipo)
             {
-                case TipoArCondicionadoEnum.Ventobaumm:
-                    return new ArCondicionadoVentoBaummAdapter(new ArCondicionadoVentoBaumn());
+                case TipoArCondicionadoEnum.Ventobaumn:
+                    return new ArCondicionadoVentoBaumnAdapter(new ArCondicionadoVentoBaumn());
 
                 case TipoArCondicionadoEnum.Gellakaza:
                     return new ArCondicionadoGellaKazaAdapter(new ArCondicionadoGellaKaza());
@@ -44,7 +44,7 @@ namespace CasaSmart.Factories
         {
             switch (tipo)
             {
-                case TipoPersianaEnum.Solaris:
+                case TipoPersianaEnum.Solarius:
                     return new PersianaSolariusAdapter(new PersianaSolarius());
 
                 case TipoPersianaEnum.Natlight:

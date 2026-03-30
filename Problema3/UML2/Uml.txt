@@ -1,0 +1,227 @@
+@startuml CasaSmart
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+skinparam nodesep 120
+skinparam ranksep 140
+' =====================================================
+' ENUMS
+' =====================================================
+package "Enums" {
+    enum ModoCasaEnum {
+        Sono
+        Trabalho
+    }
+
+    enum TipoLampadaEnum {
+        Phellipes
+        Shoyumi
+    }
+
+    enum TipoArCondicionadoEnum {
+        Ventobaumn
+        Gellakaza
+    }
+
+    enum TipoPersianaEnum {
+        Solarius
+        Natlight
+    }
+}
+
+' =====================================================
+' INTERFACES (PADRÃO DO SISTEMA)
+' =====================================================
+package "Interfaces" {
+
+    interface ILampada {
+        + Ligar()
+        + Desligar()
+        + EstaLigada(): bool
+    }
+
+    interface IPersiana {
+        + SubirPersiana()
+        + DescerPersiana()
+        + EstaAberta(): bool
+    }
+
+    interface IArCondicionado {
+        + Ligar()
+        + Desligar()
+        + AumentarTemperatura()
+        + DiminuirTemperatura()
+        + DefinirTemperatura(int)
+        + EstaLigado(): bool
+        + GetTemperatura(): int
+    }
+
+    interface IDispositivoObserver {
+        + Atualizar(modo: ModoCasaEnum)
+    }
+}
+
+' =====================================================
+' BIBLIOTECA EXTERNA (DLL)
+' =====================================================
+package "DLL (Dispositivos)" {
+
+    class LampadaShoyuMi <<external>> {
+        - ligada: boolean
+        --
+        + Ligar(): void
+        + Desligar(): void
+        + EstaLigada(): boolean
+    }
+
+    class LampadaPhellipes <<external>> {
+        - intensidade: int
+        --
+        + SetIntensidade(intensidade: int): void
+        + GetIntensidade(): int
+    }
+
+    class PersianaSolarius <<external>> {
+        - aberta: boolean
+        --
+        + SubirPersiana(): void
+        + DescerPersiana(): void
+        + EstaAberta(): boolean
+    }
+
+    class PersianaNatLight <<external>> {
+        - palhetaAberta: boolean
+        - palhetaErguida: boolean
+        --
+        + DescerPalheta(): void
+        + SubirPalheta(): void
+        + AbrirPalheta(): void
+        + FecharPalheta(): void
+        + EstaPalhetaAberta(): boolean
+        + EstaPalhetaErguida(): boolean
+    }
+
+    class ArCondicionadoVentoBaumn <<external>> {
+        - temperatura: int
+        - ligado: boolean
+        --
+        + Ligar(): void
+        + Desligar(): void
+        + DefinirTemperatura(temperatura: int): void
+        + EstaLigado(): boolean
+        + GetTemperatura(): int
+    }
+
+    class ArCondicionadoGellaKaza <<external>> {
+        - temperatura: int
+        - ligado: boolean
+        --
+        + Ativar(): void
+        + Desativar(): void
+        + AumentarTemperatura(): void
+        + DiminuirTemperatura(): void
+        + EstaLigado(): boolean
+        + GetTemperatura(): int
+    }
+}
+
+' =====================================================
+' ADAPTERS (PADRÃO ADAPTER)
+' =====================================================
+package "Adapters" {
+
+    class LampadaShoyuMiAdapter
+    class LampadaPhellipesAdapter
+
+    class PersianaSolariusAdapter
+    class PersianaNatLightAdapter
+
+    class ArCondicionadoVentoBaumnAdapter
+    class ArCondicionadoGellaKazaAdapter
+}
+
+' =====================================================
+' CORE (OBSERVER)
+' =====================================================
+package "Core" {
+
+    class Casa {
+        - dispositivos: List<IDispositivoObserver>
+        --
+        + AdicionarDispositivo(d: IDispositivoObserver)
+        + Notificar(modo: ModoCasaEnum)
+        + AtivarModoSono()
+        + AtivarModoTrabalho()
+    }
+}
+
+' =====================================================
+' FACTORY
+' =====================================================
+package "Factory" {
+
+    class DispositivosFactory {
+        + CriarLampada(tipo: TipoLampadaEnum): ILampada
+        + CriarPersiana(tipo: TipoPersianaEnum): IPersiana
+        + CriarArCondicionado(tipo: TipoArCondicionadoEnum): IArCondicionado
+    }
+}
+
+' =====================================================
+' RELAÇÕES - ADAPTER
+' =====================================================
+
+LampadaShoyuMiAdapter ..|> ILampada
+LampadaShoyuMiAdapter ..|> IDispositivoObserver
+
+LampadaPhellipesAdapter ..|> ILampada
+LampadaPhellipesAdapter ..|> IDispositivoObserver
+
+PersianaSolariusAdapter ..|> IPersiana
+PersianaSolariusAdapter ..|> IDispositivoObserver
+
+PersianaNatLightAdapter ..|> IPersiana
+PersianaNatLightAdapter ..|> IDispositivoObserver
+
+ArCondicionadoVentoBaumnAdapter ..|> IArCondicionado
+ArCondicionadoVentoBaumnAdapter ..|> IDispositivoObserver
+
+ArCondicionadoGellaKazaAdapter ..|> IArCondicionado
+ArCondicionadoGellaKazaAdapter ..|> IDispositivoObserver
+
+' =====================================================
+' RELAÇÕES - COMPOSIÇÃO (Adapter → DLL)
+' =====================================================
+
+LampadaShoyuMiAdapter *-- LampadaShoyuMi
+LampadaPhellipesAdapter *-- LampadaPhellipes
+
+PersianaSolariusAdapter *-- PersianaSolarius
+PersianaNatLightAdapter *-- PersianaNatLight
+
+ArCondicionadoVentoBaumnAdapter *-- ArCondicionadoVentoBaumn
+ArCondicionadoGellaKazaAdapter *-- ArCondicionadoGellaKaza
+
+' =====================================================
+' OBSERVER
+' =====================================================
+
+Casa "1" o-- "0..*" IDispositivoObserver
+
+Casa ..> ModoCasaEnum
+IDispositivoObserver ..> ModoCasaEnum
+
+' =====================================================
+' FACTORY
+' =====================================================
+
+DispositivosFactory ..> ILampada : <<create>>
+DispositivosFactory ..> IPersiana : <<create>>
+DispositivosFactory ..> IArCondicionado : <<create>>
+
+DispositivosFactory ..> TipoLampadaEnum
+DispositivosFactory ..> TipoPersianaEnum
+DispositivosFactory ..> TipoArCondicionadoEnum
+
+@enduml

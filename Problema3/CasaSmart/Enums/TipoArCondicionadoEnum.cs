@@ -6,7 +6,7 @@ namespace CasaSmart.Enums
 {
     public enum TipoArCondicionadoEnum
     {
-        Ventobaumm,
+        Ventobaumn,
         Gellakaza
     }
 }

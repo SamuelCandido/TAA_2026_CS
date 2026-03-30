@@ -35,8 +35,7 @@ namespace CasaSmart.Adapters
         {
             if (modo == ModoCasaEnum.Sono)
                 DescerPersiana();
-
-            if (modo == ModoCasaEnum.Trabalho)
+            else if (modo == ModoCasaEnum.Trabalho)
                 SubirPersiana();
         }
 

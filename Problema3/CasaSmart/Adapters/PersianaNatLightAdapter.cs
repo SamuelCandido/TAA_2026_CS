@@ -34,7 +34,7 @@ namespace CasaSmart.Adapters
 
         public void FecharPalheta()
         {
-            FecharPalheta();
+            _persiana.FecharPalheta();
         }
 
         public void AbrirPalheta()
@@ -46,8 +46,7 @@ namespace CasaSmart.Adapters
         {
             if (modo == ModoCasaEnum.Sono)
                 DescerPersiana();
-
-            if (modo == ModoCasaEnum.Trabalho)
+            else if (modo == ModoCasaEnum.Trabalho)
                 SubirPersiana();
         }
     }

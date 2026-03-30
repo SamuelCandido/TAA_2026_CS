@@ -9,7 +9,8 @@ namespace CasaSmart.Adapters
 {
     public class ArCondicionadoGellaKazaAdapter: IArCondicionado, IDispositivoObserver
     {
-        ArCondicionadoGellaKaza _arCondicionado;
+        private const int TemperaturaTrabalho = 25;
+        private ArCondicionadoGellaKaza _arCondicionado;
 
         public ArCondicionadoGellaKazaAdapter(ArCondicionadoGellaKaza arCondicionado)
         {
@@ -28,7 +29,7 @@ namespace CasaSmart.Adapters
 
         public void DiminuirTemperatura()
         {
-            _arCondicionado.AumentarTemperatura();
+            _arCondicionado.DiminuirTemperatura();
         }
 
         public bool EstaLigado()
@@ -50,13 +51,11 @@ namespace CasaSmart.Adapters
         {
             if (modo == ModoCasaEnum.Sono)
                 Desligar();
-
-            if (modo == ModoCasaEnum.Trabalho)
+            else if (modo == ModoCasaEnum.Trabalho)
             {
                 Ligar();
-                DefinirTemperatura(25);
+                DefinirTemperatura(TemperaturaTrabalho);
             }
-
         }
 
         public void DefinirTemperatura(int temperatura)
@@ -67,12 +66,10 @@ namespace CasaSmart.Adapters
                 if(temperaturaAtual < temperatura)
                 {
                     AumentarTemperatura();
-                    continue;
                 }
-                if(temperaturaAtual > temperatura)
+                else if(temperaturaAtual > temperatura)
                 {
                     DiminuirTemperatura();
-                    continue;
                 }
 
                 temperaturaAtual = GetTemperatura();

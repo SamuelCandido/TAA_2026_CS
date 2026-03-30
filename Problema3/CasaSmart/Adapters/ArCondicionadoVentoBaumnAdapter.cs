@@ -7,11 +7,12 @@ using System.Text;
 
 namespace CasaSmart.Adapters
 {
-    public class ArCondicionadoVentoBaummAdapter : IArCondicionado, IDispositivoObserver
+    public class ArCondicionadoVentoBaumnAdapter : IArCondicionado, IDispositivoObserver
     {
+        private const int TemperaturaTrabalho = 25;
         private ArCondicionadoVentoBaumn _arCondicionado;
 
-        public ArCondicionadoVentoBaummAdapter(ArCondicionadoVentoBaumn arCondicionado)
+        public ArCondicionadoVentoBaumnAdapter(ArCondicionadoVentoBaumn arCondicionado)
         {
             _arCondicionado = arCondicionado;
         }
@@ -57,13 +58,11 @@ namespace CasaSmart.Adapters
         {
             if (modo == ModoCasaEnum.Sono)
                 Desligar();
-
-            if (modo == ModoCasaEnum.Trabalho)
+            else if (modo == ModoCasaEnum.Trabalho)
             {
                 Ligar();
-                DefinirTemperatura(25);
+                DefinirTemperatura(TemperaturaTrabalho);
             }
-                
         }
     }
 }

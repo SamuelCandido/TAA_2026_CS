@@ -9,7 +9,7 @@ namespace CasaSmart.Adapters
 {
     public class LampadaShoyuMiAdapter : ILampada, IDispositivoObserver
     {
-        LampadaShoyuMi _lampada;
+        private LampadaShoyuMi _lampada;
 
         public LampadaShoyuMiAdapter(LampadaShoyuMi lampada)
         {
@@ -35,8 +35,7 @@ namespace CasaSmart.Adapters
         {
             if (modo == ModoCasaEnum.Sono)
                 Desligar();
-
-            if (modo == ModoCasaEnum.Trabalho)
+            else if (modo == ModoCasaEnum.Trabalho)
                 Ligar();
         }
     }
