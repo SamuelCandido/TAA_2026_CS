@@ -9,53 +9,26 @@ namespace CasaSmart.Adapters
 {
     public class ArCondicionadoGellaKazaAdapter: IArCondicionado, IDispositivoObserver
     {
-        private const int TemperaturaTrabalho = 25;
         private ArCondicionadoGellaKaza _arCondicionado;
 
         public ArCondicionadoGellaKazaAdapter(ArCondicionadoGellaKaza arCondicionado)
         {
             _arCondicionado = arCondicionado;
         }
-
-        public void AumentarTemperatura()
-        {
-            _arCondicionado.AumentarTemperatura();
-        }
-
-        public void Desligar()
-        {
-            _arCondicionado.Desativar();
-        }
-
-        public void DiminuirTemperatura()
-        {
-            _arCondicionado.DiminuirTemperatura();
-        }
-
+        
         public bool EstaLigado()
         {
             return _arCondicionado.EstaLigado();
-        }
-
-        public int GetTemperatura()
-        {
-            return _arCondicionado.GetTemperatura();
-        }
+        }        
 
         public void Ligar()
         {
             _arCondicionado.Ativar();
-        }
+        }        
 
-        public void Atualizar(ModoCasaEnum modo)
+        public void Desligar()
         {
-            if (modo == ModoCasaEnum.Sono)
-                Desligar();
-            else if (modo == ModoCasaEnum.Trabalho)
-            {
-                Ligar();
-                DefinirTemperatura(TemperaturaTrabalho);
-            }
+            _arCondicionado.Desativar();
         }
 
         public void DefinirTemperatura(int temperatura)
@@ -73,6 +46,32 @@ namespace CasaSmart.Adapters
                 }
 
                 temperaturaAtual = GetTemperatura();
+            }
+        }                   
+
+        public void AumentarTemperatura()
+        {
+            _arCondicionado.AumentarTemperatura();
+        }
+
+        public void DiminuirTemperatura()
+        {
+            _arCondicionado.DiminuirTemperatura();
+        }     
+
+        public int GetTemperatura()
+        {
+            return _arCondicionado.GetTemperatura();
+        }
+
+        public void Atualizar(ModoCasaEnum modo)
+        {
+            if (modo == ModoCasaEnum.Sono)
+                Desligar();
+            else if (modo == ModoCasaEnum.Trabalho)
+            {
+                Ligar();
+                DefinirTemperatura(TEMPERATURA_TRABALHO);
             }
         }
     }

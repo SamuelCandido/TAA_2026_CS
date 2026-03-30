@@ -16,6 +16,11 @@ namespace CasaSmart.Adapters
             _persiana = persiana;
         }
 
+        public bool EstaAberta()
+        {
+            return _persiana.EstaPalhetaAberta() && _persiana.EstaPalhetaErguida();
+        }
+
         public void SubirPersiana()
         {
             AbrirPalheta();
@@ -25,11 +30,7 @@ namespace CasaSmart.Adapters
         public void DescerPersiana()
         {
             _persiana.DescerPalheta();
-        }
-
-        public bool EstaAberta()
-        {
-            return _persiana.EstaPalhetaAberta() && _persiana.EstaPalhetaErguida();
+            FecharPalheta();
         }
 
         public void FecharPalheta()

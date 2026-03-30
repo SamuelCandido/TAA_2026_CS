@@ -8,8 +8,7 @@ using System.Text;
 namespace CasaSmart.Adapters
 {
     public class ArCondicionadoVentoBaumnAdapter : IArCondicionado, IDispositivoObserver
-    {
-        private const int TemperaturaTrabalho = 25;
+    {        
         private ArCondicionadoVentoBaumn _arCondicionado;
 
         public ArCondicionadoVentoBaumnAdapter(ArCondicionadoVentoBaumn arCondicionado)
@@ -17,20 +16,30 @@ namespace CasaSmart.Adapters
             _arCondicionado = arCondicionado;
         }
 
-        public void AumentarTemperatura()
+        public bool EstaLigado()
         {
-            int temperatura = GetTemperatura();
-            _arCondicionado.DefinirTemperatura(temperatura + 1);
+            return _arCondicionado.EstaLigado();
         }
 
-        public void DefinirTemperatura(int temperatura)
+        public void Ligar()
         {
-            _arCondicionado.DefinirTemperatura(temperatura);
-        }
+            _arCondicionado.Ligar();
+        }        
 
         public void Desligar()
         {
             _arCondicionado.Desligar();
+        }        
+
+        public void DefinirTemperatura(int temperatura)
+        {
+            _arCondicionado.DefinirTemperatura(temperatura);
+        }        
+
+        public void AumentarTemperatura()
+        {
+            int temperatura = GetTemperatura();
+            _arCondicionado.DefinirTemperatura(temperatura + 1);
         }
 
         public void DiminuirTemperatura()
@@ -39,19 +48,9 @@ namespace CasaSmart.Adapters
             _arCondicionado.DefinirTemperatura(temperatura - 1);
         }
 
-        public bool EstaLigado()
-        {
-            return _arCondicionado.EstaLigado();
-        }
-
         public int GetTemperatura()
         {
             return _arCondicionado.GetTemperatura();
-        }
-
-        public void Ligar()
-        {
-            _arCondicionado.Ligar();
         }
 
         public void Atualizar(ModoCasaEnum modo)
@@ -61,7 +60,7 @@ namespace CasaSmart.Adapters
             else if (modo == ModoCasaEnum.Trabalho)
             {
                 Ligar();
-                DefinirTemperatura(TemperaturaTrabalho);
+                DefinirTemperatura(TEMPERATURA_TRABALHO);
             }
         }
     }

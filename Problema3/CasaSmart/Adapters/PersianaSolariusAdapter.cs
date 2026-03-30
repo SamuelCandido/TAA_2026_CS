@@ -16,19 +16,19 @@ namespace CasaSmart.Adapters
             _persiana = persiana;
         }
 
-        public void DescerPersiana()
-        {
-            _persiana.DescerPersiana();
-        }
-
         public bool EstaAberta()
         {
             return _persiana.EstaAberta();
-        }
+        }    
 
         public void SubirPersiana()
         {
             _persiana.SubirPersiana();
+        }
+
+        public void DescerPersiana()
+        {
+            _persiana.DescerPersiana();
         }
 
         public void Atualizar(ModoCasaEnum modo)

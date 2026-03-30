@@ -16,11 +16,6 @@ namespace CasaSmart.Adapters
             _lampada = lampada;
         }
 
-        public void Desligar()
-        {
-            _lampada.Desligar();
-        }
-
         public bool EstaLigada()
         {
             return _lampada.EstaLigada();
@@ -29,6 +24,11 @@ namespace CasaSmart.Adapters
         public void Ligar()
         {
             _lampada.Ligar();
+        }
+
+        public void Desligar()
+        {
+            _lampada.Desligar();
         }
 
         public void Atualizar(ModoCasaEnum modo)
