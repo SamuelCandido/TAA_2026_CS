@@ -1,6 +1,7 @@
 ﻿using AlgoritmosDotNet;
 using CasaSmart.Enums;
 using CasaSmart.Interfaces;
+using CasaSmart.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -71,7 +72,7 @@ namespace CasaSmart.Adapters
             else if (modo == ModoCasaEnum.Trabalho)
             {
                 Ligar();
-                DefinirTemperatura(TEMPERATURA_TRABALHO);
+                DefinirTemperatura(ConstantesModos.TEMPERATURA_TRABALHO);
             }
         }
     }

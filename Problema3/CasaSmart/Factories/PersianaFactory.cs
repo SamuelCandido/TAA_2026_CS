@@ -1,3 +1,8 @@
+using AlgoritmosDotNet;
+using CasaSmart.Adapters;
+using CasaSmart.Enums;
+using CasaSmart.Interfaces;
+
 namespace CasaSmart.Factories
 {
     public class PersianaFactory

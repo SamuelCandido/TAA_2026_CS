@@ -6,8 +6,6 @@ namespace CasaSmart.Interfaces
 {
     public interface IArCondicionado
     {
-        const int TEMPERATURA_TRABALHO = 25;
-
         void Ligar();
         void Desligar();
         void AumentarTemperatura();
