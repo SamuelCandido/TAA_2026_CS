@@ -170,7 +170,6 @@ package "Adapters" {
     }
 
     class ArCondicionadoVentoBaumnAdapter {
-        - TemperaturaTrabalho: int = 25
         - _arCondicionado: ArCondicionadoVentoBaumn
         --
         + Ligar(): void
@@ -184,7 +183,6 @@ package "Adapters" {
     }
 
     class ArCondicionadoGellaKazaAdapter {
-        - TemperaturaTrabalho: int = 25
         - _arCondicionado: ArCondicionadoGellaKaza
         --
         + Ligar(): void
@@ -214,14 +212,30 @@ package "Models" {
 }
 
 ' =====================================================
+' CONSTANTS
+' =====================================================
+package "Constants" {
+
+    class CasaSmartConstants <<static>> {
+        + {static} TEMPERATURA_TRABALHO: int = 25
+    }
+}
+
+' =====================================================
 ' FACTORY
 ' =====================================================
 package "Factory" {
 
-    class DispositivosFactory {
-        + CriarLampada(tipo: TipoLampadaEnum): ILampada
-        + CriarPersiana(tipo: TipoPersianaEnum): IPersiana
-        + CriarArCondicionado(tipo: TipoArCondicionadoEnum): IArCondicionado
+    class LampadaFactory {
+        + {static} CriarLampada(tipo: TipoLampadaEnum): ILampada
+    }
+
+    class PersianaFactory {
+        + {static} CriarPersiana(tipo: TipoPersianaEnum): IPersiana
+    }
+
+    class ArCondicionadoFactory {
+        + {static} CriarArCondicionado(tipo: TipoArCondicionadoEnum): IArCondicionado
     }
 }
 
@@ -273,12 +287,19 @@ IDispositivoObserver ..> ModoCasaEnum
 ' FACTORY
 ' =====================================================
 
-DispositivosFactory ..> ILampada : <<create>>
-DispositivosFactory ..> IPersiana : <<create>>
-DispositivosFactory ..> IArCondicionado : <<create>>
+LampadaFactory ..> ILampada : <<create>>
+PersianaFactory ..> IPersiana : <<create>>
+ArCondicionadoFactory ..> IArCondicionado : <<create>>
 
-DispositivosFactory ..> TipoLampadaEnum
-DispositivosFactory ..> TipoPersianaEnum
-DispositivosFactory ..> TipoArCondicionadoEnum
+LampadaFactory ..> TipoLampadaEnum
+PersianaFactory ..> TipoPersianaEnum
+ArCondicionadoFactory ..> TipoArCondicionadoEnum
+
+' =====================================================
+' CONSTANTS DEPENDENCIES
+' =====================================================
+
+ArCondicionadoVentoBaumnAdapter ..> CasaSmartConstants
+ArCondicionadoGellaKazaAdapter ..> CasaSmartConstants
 
 @enduml
