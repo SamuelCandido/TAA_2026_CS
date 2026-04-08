@@ -1,0 +1,40 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.exe
+*.pdb
+*.log
+
+## Visual Studio / Rider
+.vs/
+.idea/
+*.sln.DotSettings.user
+
+## Test Results
+TestResults/
+*.trx
+*.coverage
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+## OS
+.DS_Store
+Thumbs.db
